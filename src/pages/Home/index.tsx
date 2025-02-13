@@ -1,9 +1,11 @@
 import React from 'react'
-import SideMenu from '../../components/SideMenu'
+import Header from '../../components/Header'
 
 const Home:React.FC = () => {
   return(
-    <SideMenu />
+    <>
+      <Header title='Home' />
+    </>
   )
 }
 

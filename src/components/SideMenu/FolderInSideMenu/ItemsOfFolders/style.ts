@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import styled from "styled-components";
 
 export const StyledListOfItems = styled.ul`
@@ -12,6 +13,11 @@ export const StyledListOfItems = styled.ul`
   margin-left: .5rem;
   margin-top: .2rem;
   border-left: 1px solid rgba(255, 255, 255, .2);
+`
+
+export const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: inherit;
 `
 
 export const ItemOfList = styled.li`
