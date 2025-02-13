@@ -8,6 +8,9 @@ export const SideContainer = styled.div`
 
 export const FoldersNavigation = styled.div`
   padding: 1rem;
+  display: flex;
+  flex-direction:column;
+  gap: .2rem;
 `
 
 export const SideMenuTitle = styled.h2`
