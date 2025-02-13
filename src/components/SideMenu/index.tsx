@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { FoldersNavigation, SideContainer, SideMenuTitle } from './style'
-import FolderInSideMenu from '../FolderInSideMenu'
+import FolderInSideMenu from './FolderInSideMenu'
 import { foldersMock } from '../../mock.tests'
 
 const SideMenu:React.FC = () => {
-  const [ actived, setActived ] = useState<number | null>(null)
+  const [ activeds, setActiveds ] = useState<number[]>([])
     
   return(
     <SideContainer>
@@ -15,8 +15,8 @@ const SideMenu:React.FC = () => {
             key={index}
             index={index}
             name={item.name}
-            setActived={setActived}
-            actived={actived}
+            setActiveds={setActiveds}
+            activeds={activeds}
           />
         )}
       </FoldersNavigation>

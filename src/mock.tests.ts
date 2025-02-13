@@ -1,8 +1,28 @@
 export const foldersMock = [
   {
     name:'Entradas',
+    item:[
+      {
+        id:1,
+        name:'Salário'
+      },
+      {
+        id:2,
+        name:'Renda'
+      },
+    ]
   },
   {
-    name:'Saídas'
+    name:'Saídas',
+    item:[
+      {
+        id:3,
+        name:'Cursos'
+      },
+      {
+        id:4,
+        name:'Namorada'
+      },
+    ]
   }
 ]

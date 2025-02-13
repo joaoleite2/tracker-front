@@ -17,4 +17,8 @@ export const StyledListOfItems = styled.ul`
 export const ItemOfList = styled.li`
   cursor: pointer;
   color: rgba(255, 255, 255, .6);
+
+  &.actived{
+    color: #fff;
+  }
 `
