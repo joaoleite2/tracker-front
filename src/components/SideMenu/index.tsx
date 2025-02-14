@@ -5,6 +5,7 @@ import { foldersMock } from '../../mock.tests'
 
 const SideMenu:React.FC = () => {
   const [ activeds, setActiveds ] = useState<number[]>([])
+  const [openDropdownIndex, setOpenDropdownIndex] = useState<number | null>(null)
     
   return(
     <SideContainer>
@@ -17,6 +18,8 @@ const SideMenu:React.FC = () => {
             name={item.name}
             setActiveds={setActiveds}
             activeds={activeds}
+            openDropdownIndex={openDropdownIndex}
+            setOpenDropdownIndex={setOpenDropdownIndex}
           />
         )}
       </FoldersNavigation>
