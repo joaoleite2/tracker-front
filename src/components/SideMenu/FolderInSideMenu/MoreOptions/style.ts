@@ -10,6 +10,7 @@ export const MoreOptionsDropDownContainer = styled.ul`
   display: flex;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   flex-direction: column;
+  user-select: none;
 `
 
 export const OptionItem = styled.li`

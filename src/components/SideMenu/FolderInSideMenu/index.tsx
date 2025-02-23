@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { FolderContainer, FolderItem, LeftItems, ContainerComponentAndDrop } from './style'
-import { RiArrowRightSLine, RiArrowDownSLine } from "react-icons/ri";
-import { FaRegFolder } from "react-icons/fa";
-import ItemsOfFolders from './ItemsOfFolders';
-import MoreOptionsDropdown from './MoreOptions';
+import { RiArrowRightSLine, RiArrowDownSLine } from 'react-icons/ri'
+import { FaRegFolder } from 'react-icons/fa'
+import ItemsOfFolders from './ItemsOfFolders'
+import MoreOptionsDropdown from './MoreOptions'
 
 interface PropsType {
   name: string
@@ -34,10 +34,10 @@ const FolderInSideMenu: React.FC<PropsType> = ({ activeds, index, name, setActiv
     }
 
     if (openDropdownIndex !== null)
-      document.addEventListener("mousedown", handleClickOutside)
+      document.addEventListener('mousedown', handleClickOutside)
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
+      document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [openDropdownIndex])
 
