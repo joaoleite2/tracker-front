@@ -57,7 +57,7 @@ const FolderInSideMenu: React.FC<PropsType> = ({ activeds, index, name, setActiv
             <span id='text'>{name}</span>
           </LeftItems>
         </FolderItem>
-        {activeds.includes(index) && <ItemsOfFolders mockIndex={index} />}
+        {activeds.includes(index) && <ItemsOfFolders folderIndex={index} />}
       </FolderContainer>
       {openDropdownIndex === index && (
         <div ref={dropdownRef}>
