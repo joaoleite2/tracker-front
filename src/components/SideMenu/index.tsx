@@ -1,22 +1,28 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { PiFolderSimplePlus } from 'react-icons/pi'
-import { CreateFolder, FoldersContainer, FoldersNavigation, InputData, SideContainer, SideMenuTitle } from './style'
+import { CreateFolder, FoldersDivContainer, FoldersNavigation, SideContainer, SideMenuTitle } from './style'
 import FolderInSideMenu from './FolderInSideMenu'
 import axios from 'axios'
+import { Input } from '../styled-input'
+import { SideMenuContext } from '../../contexts/SideMenuContext'
 
-interface FoldersInterface {
+export interface FileInterface {
   id:number
   name:string
 }
 
+export interface FolderInterface {
+  id:number
+  name:string
+  files:FileInterface[]
+}
+
 const SideMenu:React.FC = () => {
-  const [ folders, setFolders ] = useState<FoldersInterface[]>([])
-  const [ activeds, setActiveds ] = useState<number[]>([])
-  const [ openDropdownIndex, setOpenDropdownIndex ] = useState<number | null>(null)
+  const [ folders, setFolders ] = useState<FolderInterface[]>([])
   const [ inputNewFolder, setInputNewFolder ] = useState<boolean>(false)
   const [ folderName, setFolderName ] = useState<string>('')
-  const [ refresh, setRefresh ] = useState<boolean>(false)
   const inputRef = useRef<HTMLInputElement | null>(null)
+  const { setRefresh, refresh } = useContext(SideMenuContext)
 
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_BASE_URL}/folders`)
@@ -59,9 +65,9 @@ const SideMenu:React.FC = () => {
       <SideMenuTitle>Tracking</SideMenuTitle>
       <FoldersNavigation>
         <CreateFolder>
-          <InputData
+          <Input
             ref={inputRef}
-            className={inputNewFolder ? 'visible' : ''}
+            className={!inputNewFolder ? 'invisible' : ''}
             placeholder='Ex...'
             value={folderName}
             onChange={(e) => setFolderName(e.target.value)}
@@ -69,19 +75,15 @@ const SideMenu:React.FC = () => {
           />
           <PiFolderSimplePlus onClick={() => setInputNewFolder(true)} cursor={'pointer'}/>
         </CreateFolder>
-        <FoldersContainer>
+        <FoldersDivContainer>
           {folders.map((item, index) => 
             <FolderInSideMenu 
               key={index}
-              index={index}
               name={item.name}
-              setActiveds={setActiveds}
-              activeds={activeds}
-              openDropdownIndex={openDropdownIndex}
-              setOpenDropdownIndex={setOpenDropdownIndex}
+              item={item}
             />
           )}
-        </FoldersContainer>
+        </FoldersDivContainer>
       </FoldersNavigation>
     </SideContainer>
   )

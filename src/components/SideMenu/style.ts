@@ -34,23 +34,7 @@ export const CreateFolder = styled.div`
   padding-bottom: .5rem;
 `
 
-export const InputData = styled.input`
-  flex: 1;
-  outline: none;
-  border: none;
-  height: 1.8rem;
-  padding: 0 .5rem;
-  border-radius: .3rem;
-  background-color: #282828;
-  color: #fff;
-  visibility: hidden;
-  
-  &.visible{
-    visibility: visible;
-  }
-`
-
-export const FoldersContainer = styled.div`
+export const FoldersDivContainer = styled.div`
   overflow-y: auto;
   flex: 1;
   max-height: 100%;

@@ -1,45 +1,44 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useContext, useEffect, useRef } from 'react'
 import { FolderContainer, FolderItem, LeftItems, ContainerComponentAndDrop } from './style'
 import { RiArrowRightSLine, RiArrowDownSLine } from 'react-icons/ri'
 import { FaRegFolder } from 'react-icons/fa'
 import ItemsOfFolders from './ItemsOfFolders'
 import MoreOptionsDropdown from './MoreOptions'
+import { FolderInterface } from '..'
+import { SideMenuContext } from '../../../contexts/SideMenuContext'
 
 interface PropsType {
   name: string
-  index: number
-  setActiveds: React.Dispatch<React.SetStateAction<number[]>>
-  activeds: number[]
-  openDropdownIndex: number | null
-  setOpenDropdownIndex: React.Dispatch<React.SetStateAction<number | null>>
+  item:FolderInterface
 }
 
-const FolderInSideMenu: React.FC<PropsType> = ({ activeds, index, name, setActiveds, openDropdownIndex, setOpenDropdownIndex }) => {
+const FolderInSideMenu: React.FC<PropsType> = ({ name, item }) => {
+  const { activeds, setActiveds, setOpenDropdownItemId, openDropdownItemId, createFile } = useContext(SideMenuContext)
   const dropdownRef = useRef<HTMLDivElement | null>(null)
 
-  const handleOpenFolder = (itemIndex: number) => {
-    if (activeds.includes(itemIndex))
-      return setActiveds(prev => prev.filter(item => item !== itemIndex))
-    return setActiveds(prev => [...prev, itemIndex])
+  const handleOpenFolder = (itemId: number) => {
+    if (activeds.includes(itemId))
+      return setActiveds(prev => prev.filter(item => item !== itemId))
+    return setActiveds(prev => [...prev, itemId])
   }
 
   const handleDropdownToggle = () => {
-    setOpenDropdownIndex(openDropdownIndex === index ? null : index)
+    setOpenDropdownItemId(openDropdownItemId === item.id ? 0 : item.id)
   }
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node))
-        setOpenDropdownIndex(null)
+        setOpenDropdownItemId(0)
     }
 
-    if (openDropdownIndex !== null)
+    if (openDropdownItemId !== 0)
       document.addEventListener('mousedown', handleClickOutside)
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [openDropdownIndex])
+  }, [openDropdownItemId])
 
   return (
     <ContainerComponentAndDrop>
@@ -48,18 +47,18 @@ const FolderInSideMenu: React.FC<PropsType> = ({ activeds, index, name, setActiv
         onAuxClick={handleDropdownToggle}
       >
         <FolderItem 
-          onClick={() => handleOpenFolder(index)}
-          className={activeds.includes(index) ? 'actived' : ''}
+          onClick={() => handleOpenFolder(item.id)}
+          className={activeds.includes(item.id) ? 'actived' : ''}
         >
           <LeftItems>
-            {!activeds.includes(index) ? <RiArrowRightSLine /> : <RiArrowDownSLine />}
+            {!activeds.includes(item.id) ? <RiArrowRightSLine /> : <RiArrowDownSLine />}
             <FaRegFolder />
             <span id='text'>{name}</span>
           </LeftItems>
         </FolderItem>
-        {activeds.includes(index) && <ItemsOfFolders folderIndex={index} />}
+        {activeds.includes(item.id) && (item.files.length || createFile.folderId === item.id) ? <ItemsOfFolders allFolder={item} /> : null}
       </FolderContainer>
-      {openDropdownIndex === index && (
+      {openDropdownItemId === item.id && (
         <div ref={dropdownRef}>
           <MoreOptionsDropdown />
         </div>
