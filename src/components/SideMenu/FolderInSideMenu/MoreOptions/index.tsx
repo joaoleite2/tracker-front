@@ -4,6 +4,7 @@ import { FaFile } from 'react-icons/fa'
 import { IoMdTrash } from 'react-icons/io'
 import { MdModeEdit } from 'react-icons/md'
 import { SideMenuContext } from '../../../../contexts/SideMenuContext'
+import axios from 'axios'
 
 interface OptionsType {
   label:string
@@ -13,13 +14,23 @@ interface OptionsType {
 
 
 const MoreOptionsDropdown:React.FC = () => {
-  const { setCreateFile, setOpenDropdownItemId, openDropdownItemId, setActiveds } = useContext(SideMenuContext)
+  const { setCreateFile, setOpenDropdownItemId, openDropdownItemId, setActiveds, setRefresh } = useContext(SideMenuContext)
 
   const handleCreateAFile = () => {
     setActiveds(prev => ([...prev, openDropdownItemId]))
     setCreateFile({fileName:'', folderId:openDropdownItemId})
     setOpenDropdownItemId(0)
     return
+  }
+
+  const handleDeleteAFolder = () => {
+    axios.delete(`${import.meta.env.VITE_BASE_URL}/folders/${openDropdownItemId}`)
+      .then(() => {
+        setRefresh(prev => !prev)
+      })
+      .catch(error => {
+        console.error(error)
+      })
   }
 
   const options:OptionsType[] = [
@@ -34,7 +45,8 @@ const MoreOptionsDropdown:React.FC = () => {
     },
     {
       element:<IoMdTrash />,
-      label:'Excluir'
+      label:'Excluir',
+      click:() => handleDeleteAFolder()
     },
   ]
 

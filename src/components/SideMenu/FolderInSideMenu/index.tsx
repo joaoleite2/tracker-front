@@ -22,8 +22,9 @@ const FolderInSideMenu: React.FC<PropsType> = ({ name, item }) => {
     return setActiveds(prev => [...prev, itemId])
   }
 
-  const handleDropdownToggle = () => {
-    setOpenDropdownItemId(openDropdownItemId === item.id ? 0 : item.id)
+  const handleDropdownToggle = (e:any) => {
+    if(e.button === 2)
+      return setOpenDropdownItemId(openDropdownItemId === item.id ? 0 : item.id)
   }
 
   useEffect(() => {
@@ -44,7 +45,7 @@ const FolderInSideMenu: React.FC<PropsType> = ({ name, item }) => {
     <ContainerComponentAndDrop>
       <FolderContainer
         onContextMenu={(e) => e.preventDefault()}
-        onAuxClick={handleDropdownToggle}
+        onAuxClick={(e) => handleDropdownToggle(e)}
       >
         <FolderItem 
           onClick={() => handleOpenFolder(item.id)}
