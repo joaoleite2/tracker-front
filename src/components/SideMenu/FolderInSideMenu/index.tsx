@@ -56,7 +56,7 @@ const FolderInSideMenu: React.FC<PropsType> = ({ name, item }) => {
             <span id='text'>{name}</span>
           </LeftItems>
         </FolderItem>
-        {activeds.includes(item.id) && (item.files.length || createFile.folderId === item.id) ? <ItemsOfFolders allFolder={item} /> : null}
+        {activeds.includes(item.id) && (item.files.length || createFile.folderId === item.id) ? <ItemsOfFolders selectedFolderToCreateFile={item} /> : null}
       </FolderContainer>
       {openDropdownItemId === item.id && (
         <div ref={dropdownRef}>
