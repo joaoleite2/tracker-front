@@ -27,11 +27,15 @@ const SideMenu:React.FC = () => {
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_BASE_URL}/folders`)
       .then(response => {
-        if(response.data)
+        if(response.data && Array.isArray(response.data)) {
           setFolders(response.data)
+        } else {
+          setFolders([])
+        }
       })
       .catch(error => {
         console.error(error)
+        setFolders([])
       })
   }, [refresh])
   
