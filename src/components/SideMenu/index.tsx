@@ -5,31 +5,22 @@ import FolderInSideMenu from './FolderInSideMenu'
 import axios from 'axios'
 import { Input } from '../styled-input'
 import { SideMenuContext } from '../../contexts/SideMenuContext'
+import { Folder } from '../../types'
 
-export interface FileInterface {
-  id:number
-  name:string
-}
-
-export interface FolderInterface {
-  id:number
-  name:string
-  files:FileInterface[]
-}
-
-const SideMenu:React.FC = () => {
-  const [ folders, setFolders ] = useState<FolderInterface[]>([])
-  const [ inputNewFolder, setInputNewFolder ] = useState<boolean>(false)
-  const [ folderName, setFolderName ] = useState<string>('')
+const SideMenu: React.FC = () => {
+  const [folders, setFolders] = useState<Folder[]>([])
+  const [inputNewFolder, setInputNewFolder] = useState<boolean>(false)
+  const [folderName, setFolderName] = useState<string>('')
   const inputRef = useRef<HTMLInputElement | null>(null)
   const { setRefresh, refresh } = useContext(SideMenuContext)
 
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_BASE_URL}/folders`)
       .then(response => {
-        if(response.data && Array.isArray(response.data)) {
+        if (response.data && Array.isArray(response.data)) {
           setFolders(response.data)
         } else {
+          // If no data or invalid format, initialize with empty array
           setFolders([])
         }
       })
@@ -38,53 +29,58 @@ const SideMenu:React.FC = () => {
         setFolders([])
       })
   }, [refresh])
-  
+
   useEffect(() => {
-    if(inputNewFolder && inputRef.current)
+    if (inputNewFolder && inputRef.current)
       inputRef.current.focus()
   }, [inputNewFolder])
 
-  const handleCreateAFolder = (e:React.KeyboardEvent<HTMLInputElement> | any) => {
-    if(e.key === 'Enter') {
-      axios.post(`${import.meta.env.VITE_BASE_URL}/folders`, 
-        { name:folderName }
-      )
-      .then(() => {
-        setInputNewFolder(false)
-        setRefresh(!refresh)
-        setFolderName('')
-        return
+  const handleCreateAFolder = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && folderName.trim()) {
+      axios.post(`${import.meta.env.VITE_BASE_URL}/folders`, {
+        name: folderName.trim(),
+        files: []
       })
-      .catch(error => {
-        console.error(error)
-      })
+        .then(() => {
+          setInputNewFolder(false)
+          setRefresh(!refresh)
+          setFolderName('')
+        })
+        .catch(error => {
+          console.error(error)
+        })
     }
-    if(e.key === 'Escape'){
+    if (e.key === 'Escape') {
       setInputNewFolder(false)
+      setFolderName('')
     }
   }
-    
-  return(
+
+  return (
     <SideContainer>
-      <SideMenuTitle>Tracking</SideMenuTitle>
+      <SideMenuTitle>Financial Tracker</SideMenuTitle>
       <FoldersNavigation>
         <CreateFolder>
           <Input
             ref={inputRef}
             className={!inputNewFolder ? 'invisible' : ''}
-            placeholder='Ex...'
+            placeholder="Folder name..."
             value={folderName}
             onChange={(e) => setFolderName(e.target.value)}
-            onKeyDown={(e) => handleCreateAFolder(e)}
+            onKeyDown={handleCreateAFolder}
           />
-          <PiFolderSimplePlus onClick={() => setInputNewFolder(true)} cursor={'pointer'}/>
+          <PiFolderSimplePlus
+            onClick={() => setInputNewFolder(true)}
+            cursor={'pointer'}
+            title="Create new folder"
+          />
         </CreateFolder>
         <FoldersDivContainer>
-          {folders.map((item, index) => 
-            <FolderInSideMenu 
-              key={index}
-              name={item.name}
-              item={item}
+          {folders.map((folder) =>
+            <FolderInSideMenu
+              key={folder.id}
+              name={folder.name}
+              item={folder}
             />
           )}
         </FoldersDivContainer>
