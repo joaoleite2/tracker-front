@@ -4,56 +4,51 @@ import { FaFile } from 'react-icons/fa'
 import { IoMdTrash } from 'react-icons/io'
 import { MdModeEdit } from 'react-icons/md'
 import { SideMenuContext } from '../../../../contexts/SideMenuContext'
-import axios from 'axios'
+import { useFolders } from '../../../../contexts/FolderContext'
 
 interface OptionsType {
-  label:string
-  element:any
-  click?:() => void
+  label: string
+  element: any
+  click?: () => void
 }
 
-
-const MoreOptionsDropdown:React.FC = () => {
-  const { setCreateFile, setOpenDropdownItemId, openDropdownItemId, setActiveds, setRefresh } = useContext(SideMenuContext)
+const MoreOptionsDropdown: React.FC = () => {
+  const { setCreateFile, setOpenDropdownItemId, openDropdownItemId, setActiveds } = useContext(SideMenuContext)
+  const { deleteFolder } = useFolders()
 
   const handleCreateAFile = () => {
     setActiveds(prev => ([...prev, openDropdownItemId]))
-    setCreateFile({fileName:'', folderId:openDropdownItemId})
+    setCreateFile({ fileName: '', folderId: openDropdownItemId })
     setOpenDropdownItemId(0)
     return
   }
 
   const handleDeleteAFolder = () => {
-    axios.delete(`${import.meta.env.VITE_BASE_URL}/folders/${openDropdownItemId}`)
-      .then(() => {
-        setRefresh(prev => !prev)
-      })
-      .catch(error => {
-        console.error(error)
-      })
+    deleteFolder(openDropdownItemId)
+    setOpenDropdownItemId(0)
   }
 
-  const options:OptionsType[] = [
+  const options: OptionsType[] = [
     {
-      element:<FaFile />,
-      label:'Criar',
-      click:() => handleCreateAFile()
+      element: <FaFile />,
+      label: 'Criar',
+      click: () => handleCreateAFile()
     },
     {
-      element:<MdModeEdit />,
-      label:'Renomear'
+      element: <MdModeEdit />,
+      label: 'Renomear'
     },
     {
-      element:<IoMdTrash />,
-      label:'Excluir',
-      click:() => handleDeleteAFolder()
+      element: <IoMdTrash />,
+      label: 'Excluir',
+      click: () => handleDeleteAFolder()
     },
   ]
 
-  return(
+  return (
     <MoreOptionsDropDownContainer>
-      {options.map((item, index) => 
-        <OptionItem 
+      {options.map((item, index) =>
+        <OptionItem
           key={index}
           onClick={item.click}
         >
